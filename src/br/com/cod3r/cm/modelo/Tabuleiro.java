@@ -6,13 +6,14 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class Tabuleiro implements CampoObservador{
- private int linhas;
- private int colunas;
- private int minas;
+ private final int linhas;
+ private final int colunas;
+ private final int minas;
  
  private final List<Campo> campos = new ArrayList<Campo>();
  private final List<Consumer<ResultadoEvento>> observadores = 
 	new ArrayList<>();
+ 
  public Tabuleiro(int linha, int coluna, int minas) {
 	this.linhas = linha;
 	this.colunas = coluna;
@@ -23,6 +24,10 @@ public class Tabuleiro implements CampoObservador{
 	sortearMinas();
  }
 
+ public void paraCadaCampo(Consumer<Campo> funcao) {
+	 campos.forEach(funcao);
+ }
+ 
  public void registrarObservador(Consumer<ResultadoEvento> observador) {
 	 observadores.add(observador);
  }
@@ -91,7 +96,15 @@ public class Tabuleiro implements CampoObservador{
 		return campos.stream().allMatch(c ->c.objetivoAlcancado());
 	}
  
- public void reiniciar() {
+ public int getLinhas() {
+	return linhas;
+}
+
+public int getColunas() {
+	return colunas;
+}
+
+public void reiniciar() {
 	 campos.stream().forEach(c -> c.reiniciar());
 	 sortearMinas();
 	 
