@@ -31,27 +31,20 @@ public class Tabuleiro implements CampoObservador{
  public void registrarObservador(Consumer<ResultadoEvento> observador) {
 	 observadores.add(observador);
  }
- private void notificarObservadores(Boolean resultado) {
-		observadores.stream().forEach(o -> o.
-				accept(new ResultadoEvento(resultado)));
+ private void notificarObservadores(boolean resultado) {
+		observadores.stream()
+		.forEach(o -> o.accept(new ResultadoEvento(resultado)));
 	}
  
  public void abrir(int linha,int coluna) {
-	 try {
 		 campos.parallelStream()
 		 .filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
 		 .findFirst().ifPresent(c -> c.abrir());;
-	 }catch(Exception e) {
-		 
-		 //FIXME ajustar a implementacao do metodo abrir
-		 campos.forEach(c -> c.setAberto(true));
-		 throw e;
-	 }
-	
  }
  
  private void mostrarMinas() {
 	 campos.stream().filter(c -> c.isMinado())
+	 .filter(c -> !c.isMarcado())
 	 .forEach(c -> c.setAberto(true));
  }
  
